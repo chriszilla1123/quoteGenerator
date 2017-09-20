@@ -1,0 +1,142 @@
+<html><head>
+  <!--Bootstrap CDN - 3.3.7 Complete CSS-->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  
+  <!--Font Awesome CDN - 4.7.0-->
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  
+  <!--jQuery CDN - 3.2.1 Uncompressed-->
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Quote Generator</title>
+  
+  <style>
+    #quote{
+      font-family: 'Lora', serif;
+    }
+    .quote-box{
+      background-color: white; 
+      color: white;
+      margin-top: 10%;
+      padding-bottom: 1%;
+      border-radius: 25px;
+    }
+    .btn-design{
+    }
+  </style>
+  <script>
+    $(document).ready(function(){
+      console.log("Ready!");
+    });
+    
+    /*$("#tweet").click(function(){
+      window.open("https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=" + encodeURI(quote[0].content) + encodeURI(quote[0].title));
+    }); */
+    
+    function setColor(){
+      var color = Math.floor(Math.random() * 5);
+      switch(color){
+        case 0:  color="#C63D0F"; //Red
+          break;
+        case 1:  color="#CBE32D"; //Yellow
+          break;
+        case 2:  color="#A8CD1B"; //Light Green
+          break;
+        case 3:  color="#D9853B"; //Orange?
+          break;
+        case 4:  color="#74AFAD"; //Blue-Green
+          break;
+        default: color="FFFFFF"; //White
+        }
+      $("#quote").css("color", color);
+      $("body").css("background-color", color);
+      $(".btn-design").css("background-color", color);
+    };
+    
+  
+    function newQuote(){
+      $.ajax({
+        cache: false,
+        jsonp: false,
+        url: "https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
+        success: function(quote) {
+          var fullQuote = quote[0].content + " --" + quote[0].title;
+          fullQuote = decodeHTML(fullQuote);
+          fullQuote = strip(fullQuote);
+          var twitterLink = ("https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=" + encodeURI(fullQuote));
+          $("#quote").html(quote[0].content + "<p>— " + quote[0].title + "</p>");
+          $("#tweet").attr( "href", twitterLink );
+        }
+      });
+      setColor();
+      };
+    
+    function getQuote(){
+      console.log("test: " + quoteText);
+      //return quote[0].content;
+    }
+    
+    function getAuthor(){
+      console.log("test: " + quoteAuthor);
+      //return quote[0].title;
+    }
+    
+    function decodeHTML(html) {
+      var txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value;
+    }
+    
+    function strip(html){
+      var tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || "";
+    }
+  </script>
+  </head>
+<body>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4 container-fluid text-center quote-box">
+      <h1 id="quote"></h1>
+      <div class="row">
+        <div class="col-md-1 col-md-offset-1">
+          <button class="btn btn-design"><a id="tweet" href="#" target="_blank"><i class="fa fa-twitter fa-2x"></i></a></button>
+        </div>
+        <div class="col-md-2 col-md-offset-5">
+          <button class="btn btn-design" onclick="newQuote()">New Quote</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="text-center" id="credits"><a hrev="https://github.com/chriszilla1123" target="_blank">by Christopher Hill</a></div>
+  
+  <script>
+    newQuote();
+  </script>
+  
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
